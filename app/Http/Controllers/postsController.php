@@ -55,4 +55,15 @@ class postsController extends Controller
 
         return to_route('posts.index');
     }
+
+    public function update(){
+
+
+        return to_route('posts.index');
+    }
+    public function delete(){
+
+
+        return to_route('posts.index');
+    }
 }

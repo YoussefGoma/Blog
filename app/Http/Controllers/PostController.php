@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class postsController extends Controller
+class PostController extends Controller
 {
     
     public function index(){
@@ -57,11 +57,12 @@ class postsController extends Controller
     }
 
     public function update(){
+        return 'to be implemented';
 
 
-        return to_route('posts.index');
+        // return to_route('posts.index');
     }
-    public function delete(){
+    public function destroy(){
 
 
         return to_route('posts.index');

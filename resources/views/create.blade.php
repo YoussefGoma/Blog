@@ -6,8 +6,9 @@
             </div>
 
             <div class="px-6 py-4">
-                <form method="POST" action="/posts{{isset($post) ? '/'.$post['id']:''}}">
+                <form method="post" action="/posts{{isset($post) ? '/'.$post['id']:''}}">
                     @csrf
+                    @method('put')
                     <!-- Title Input -->
                     <div class="mb-4">
                         <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Title</label>

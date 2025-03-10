@@ -2,69 +2,62 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
+use App\Models\User;
+use App\Models\Comment;
+
+
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
     
     public function index(){
-        $posts = [
-            ['id'=>1,'author'=>['name'=>'Youssef','email'=>'Youssef.goma.k@gmail.com'],'title'=>'Hello','desc'=>'hello from first post','created_at' => '2025-03-08 12:47:00'],
-            ['id'=>2,'author'=>['name'=>'Ahmed','email'=>'Ahmed@gmail.com'],'title'=>'second','desc'=>'hello from  post','created_at' => '2025-01-07 05:47:00'],
-            ['id'=>3,'author'=>['name'=>'Ali','email'=>'ali@gmail.com'],'title'=>'third','desc'=>'hello from  post','created_at' => '2025-03-05 12:47:00']
-        ];
+        $posts = Post::paginate(10);
         return view('index',['posts'=>$posts]);
     }
     public function create(){
-        return view('create');
+        $users = User::all();
+        return view('create',['users'=>$users]);
     }
     public function show($id){
-        $post= null;
-        $posts = [
-            ['id'=>1,'author'=>['name'=>'Youssef','email'=>'Youssef.goma.k@gmail.com'],'title'=>'Hello','desc'=>'hello from first post','created_at' => '2025-03-08 12:47:00'],
-            ['id'=>2,'author'=>['name'=>'Ahmed','email'=>'Ahmed@gmail.com'],'title'=>'second','desc'=>'hello from  post','created_at' => '2025-01-07 05:47:00'],
-            ['id'=>3,'author'=>['name'=>'Ali','email'=>'ali@gmail.com'],'title'=>'third','desc'=>'hello from  post','created_at' => '2025-03-05 12:47:00']
-        ];
-        foreach ($posts as $p) {
-            if ($p['id'] == $id) {
-                $post = $p;
-                break;
-            }
-        }
-        // return $post;
-        return view('show',['post'=>$post]);
+        $post= Post::find($id);
+        $user = $post->user;
+        $users = User::all();
+
+        return view('show',['post'=>$post,'user'=>$user,'users'=>$users]);
     }
     public function edit($id){
-        $post= null;
-        $posts = [
-            ['id'=>1,'author'=>['name'=>'Youssef','email'=>'Youssef.goma.k@gmail.com'],'title'=>'Hello','desc'=>'hello from first post','created_at' => '2025-03-08 12:47:00'],
-            ['id'=>2,'author'=>['name'=>'Ahmed','email'=>'Ahmed@gmail.com'],'title'=>'second','desc'=>'hello from  post','created_at' => '2025-01-07 05:47:00'],
-            ['id'=>3,'author'=>['name'=>'Ali','email'=>'ali@gmail.com'],'title'=>'third','desc'=>'hello from  post','created_at' => '2025-03-05 12:47:00']
-        ];
-        foreach ($posts as $p) {
-            if ($p['id'] == $id) {
-                $post = $p;
-                break;
-            }
-        }
-        // return $post;
-        return view('create',['post'=>$post]);
+        $post= Post::find($id);
+        $users = User::all();
+        
+        return view('update',['post'=>$post,'users'=> $users]);
     }
     public function store(){
+        $title = request()->title;
+        $author = request()->author;
+        $description = request()->description;
+        $post = Post::create([
+            'title'=> $title,
+            'user_id'=> $author,
+            'description'=> $description
+        ]);
 
-
-        return to_route('posts.index');
-    }
-
-    public function update(){
-        return 'to be implemented';
-
-
+        return to_route('posts.show',$post->id);
         // return to_route('posts.index');
     }
-    public function destroy(){
 
+    public function update($id){
+        $post= Post::find($id);
+        $post->title = request()->title;
+        $post->description = request()->description;
+        $post->save();
+        // return to_route('posts.index');
+        return to_route('posts.show',$id);
+    }
+    public function destroy($id){
 
+        Post::destroy($id);
         return to_route('posts.index');
     }
 }

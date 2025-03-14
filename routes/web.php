@@ -15,6 +15,15 @@ Route::put('/posts/{postid}', [PostController::class,'update'])->name('posts.upd
 Route::delete('/posts/{postid}', [PostController::class,'destroy'])->name('posts.destroy');
 Route::post('/posts', [PostController::class,'store'])->name('posts.store');
 
+ // ============================= posts routes (softdelete) ============================
+
+Route::delete('/posts/{postid}/force', [PostController::class,'forceDestroy'])->name('posts.forceDestroy');
+Route::put('/posts/{postid}/restore', [PostController::class,'restore'])->name('posts.restore');
+Route::get('/posts/deleted', [PostController::class, 'getDeletedPosts'])->name('posts.deleted');
+Route::get('/posts/deleted/{userid}', [PostController::class, 'getUserDeletedPosts'])->name('posts.userDeleted');
+
+
+
  // ============================= comments routes (to be seperated?) ============================
 Route::post('/comment/{postid}', [CommentController::class,'store'])->name('comments.store');
 Route::get('/comment/{commentid}/edit', [CommentController::class,'edit'])->name('comments.edit');

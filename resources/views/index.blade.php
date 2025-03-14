@@ -28,8 +28,28 @@
                             <td class="px-4 py-2 whitespace-nowrap text-gray-700">{{ $post->created_at->toDateString() }}
                             </td>
                             <td class="px-4 py-2 whitespace-nowrap text-gray-700 space-x-2">
+                            <div class="flex space-x-2">
                                 <a href="{{ route('posts.show', $post->id) }}"
                                     class="inline-block px-4 py-1 text-xs font-medium text-white bg-green-600 rounded hover:bg-green-700">View</a>
+                                @if($post->trashed())
+                                
+                                <form action="{{ route('posts.restore', $post->id) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit"
+                                        class="inline-block px-3 py-1 text-xs font-medium text-white bg-blue-600 rounded hover:bg-blue-700">
+                                        Restore
+                                    </button>
+                                </form>
+                                <form action="{{ route('posts.forceDestroy', $post->id) }}" method="POST" onsubmit="return confirm('Are you sure?');" style="display:inline";>
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                        class="inline-block px-3 py-1 text-xs font-small text-white bg-red-600 rounded hover:bg-red-700">
+                                        Permenant Delete
+                                    </button>
+                                </form>
+                                @else
                                 <a href="{{ route('posts.edit', $post->id) }}"
                                     class="inline-block px-4 py-1 text-xs font-medium text-white bg-blue-600 rounded hover:bg-blue-700">Edit</a>
                                 {{-- <a href="#"
@@ -44,7 +64,8 @@
                                     </button>
                                 </form>
                                 <span>
-
+                            @endif
+                            </div>
                             </td>
                         </tr>
                     @endforeach

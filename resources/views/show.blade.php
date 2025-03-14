@@ -4,6 +4,27 @@
            <div class="bg-white rounded border border-gray-200">
                <div class="px-4 py-3 bg-gray-50 border-b border-gray-200 flex justify-between">
                    <h2 class="px-4 py-1 text-base font-medium text-gray-700">Post Info</h2>
+                   @if($post->trashed())
+                    <div class="flex space-x-2">
+                    <form action="{{ route('posts.restore', $post->id) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <button type="submit"
+                            class=" bg-blue-600 text-white font-small rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 flex items-center justify-center px-3 py-2 text-base font-small text-white">
+                            Restore
+                        </button>
+                    </form>
+                    <form action="{{ route('posts.forceDestroy', $post->id) }}" method="POST" onsubmit="return confirm('Are you sure?');" style="display:inline";>
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit"
+                            class="px-3 py-2 text-base font-small text-white bg-red-600 rounded hover:bg-red-700 
+                       focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 flex items-center justify-center">
+                            Permenant Delete
+                        </button>
+                    </form>
+               </div>
+                   @else
                    <div class="flex space-x-2">
                    <a href="{{ route('posts.edit',$post->id) }}" class="px-3 py-1 bg-blue-600 text-white font-small rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 flex items-center justify-center">
                    Edit
@@ -18,6 +39,8 @@
                         </button>
                     </form>
                </div>
+                @endif
+                   
                 </div>
                <div class="px-4 py-4">
                    <div class="mb-2">

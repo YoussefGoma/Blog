@@ -13,7 +13,7 @@ class PostController extends Controller
 {
     
     public function index(){
-        $posts = Post::paginate(10);
+        $posts = Post::withTrashed()->paginate(10);
         return view('index',['posts'=>$posts]);
     }
     public function create(){
@@ -21,7 +21,7 @@ class PostController extends Controller
         return view('create',['users'=>$users]);
     }
     public function show($id){
-        $post= Post::find($id);
+        $post= Post::withTrashed()->find($id);
         $user = $post->user;
         $users = User::all();
 
@@ -56,8 +56,27 @@ class PostController extends Controller
         return to_route('posts.show',$id);
     }
     public function destroy($id){
-
         Post::destroy($id);
         return to_route('posts.index');
+    }
+    public function restore($id){
+        $post= Post::onlyTrashed()->find($id);
+        $post->restore();
+        // return response()->json($post);
+
+        return to_route('posts.show', $id);
+    }
+    public function forceDestroy($id){
+        $post= Post::onlyTrashed()->find($id);
+        $post->forceDelete();
+        return to_route('posts.index');
+    }
+    public function getDeletedPosts(){
+        $posts= Post::onlyTrashed()->get();
+        return to_route('posts.index',$posts);
+    }
+    public function getUserDeletedPosts($userId){
+        $posts= Post::onlyTrashed()->where('user_id', $userId)->get();
+        return to_route('posts.index',$posts);
     }
 }

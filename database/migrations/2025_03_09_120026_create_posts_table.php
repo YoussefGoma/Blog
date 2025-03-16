@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
+            $table->string('image')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
+            $table->string('slug')->unique();
             $table->softDeletes();
             $table->foreign('user_id')->references('id')->on(table: 'users')->onDelete('cascade');
         });

@@ -19,7 +19,8 @@ class PostFactory extends Factory
         return [
             'title' => fake()->sentence(),
             'description' => fake()->paragraph(),
-            'user_id' => fake()->numberBetween(1,10)
+            'user_id' => fake()->numberBetween(1,10),
+            'image' => 'posts/post-' . $this->faker->numberBetween(1, 10) . '.jpg'
         ];
     }
 }
